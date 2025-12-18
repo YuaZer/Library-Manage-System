@@ -3,7 +3,6 @@
   <Resources cacheMaxSize="10240">
     <PreResources base="D:/Minecraft/插件制作/插件开发空间/Library-Manage-System/out/production/Library-Manage-System" className="org.apache.catalina.webresources.DirResourceSet" webAppMount="/WEB-INF/classes"/>
     <PostResources base="D:/Minecraft/插件制作/插件开发空间/Library-Manage-System/lib/fastjson-1.2.47.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/fastjson-1.2.47.jar"/>
-    <PostResources base="D:/Minecraft/插件制作/插件开发空间/Library-Manage-System/lib/mysql-connector-java-5.1.42-bin.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/mysql-connector-java-5.1.42-bin.jar"/>
     <PostResources base="D:/Minecraft/插件制作/插件开发空间/Library-Manage-System/lib/commons-dbutils-1.7.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/commons-dbutils-1.7.jar"/>
     <PostResources base="D:/Minecraft/插件制作/插件开发空间/Library-Manage-System/lib/c3p0-0.9.5.5.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/c3p0-0.9.5.5.jar"/>
     <PostResources base="D:/Minecraft/插件制作/插件开发空间/Library-Manage-System/lib/jstl-1.2.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/jstl-1.2.jar"/>
@@ -11,6 +10,7 @@
     <PostResources base="D:/Minecraft/插件制作/插件开发空间/Library-Manage-System/lib/commons-fileupload-1.4.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/commons-fileupload-1.4.jar"/>
     <PostResources base="D:/Minecraft/插件制作/插件开发空间/Library-Manage-System/lib/commons-io-2.8.0.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/commons-io-2.8.0.jar"/>
     <PostResources base="D:/Minecraft/插件制作/插件开发空间/Library-Manage-System/lib/mchange-commons-java-0.2.19.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/mchange-commons-java-0.2.19.jar"/>
+    <PostResources base="D:/Minecraft/插件制作/插件开发空间/Library-Manage-System/lib/mysql-connector-j-8.1.0.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/mysql-connector-j-8.1.0.jar"/>
     <PostResources base="E:/Tomcat/apache-tomcat-9.0.113/apache-tomcat-9.0.113/lib/el-api.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/el-api.jar"/>
     <PostResources base="E:/Tomcat/apache-tomcat-9.0.113/apache-tomcat-9.0.113/lib/jasper.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/jasper.jar"/>
     <PostResources base="E:/Tomcat/apache-tomcat-9.0.113/apache-tomcat-9.0.113/lib/jsp-api.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/jsp-api.jar"/>

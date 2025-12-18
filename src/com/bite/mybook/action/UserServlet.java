@@ -39,12 +39,12 @@ public class UserServlet extends HttpServlet {
 
         //验证用户是否登录
         HttpSession session = req.getSession();
-        if (session.getAttribute("user") == null) {
+
+        String method = req.getParameter("type");
+        if (!"login".equals(method) && session.getAttribute("user") == null) {
             out.println("<script>alert('请登录');parent.window.location.href='login.html';</script>");
             return;
         }
-
-        String method = req.getParameter("type");
         switch (method) {
             case "login":
                 String code = (String) session.getAttribute("code");

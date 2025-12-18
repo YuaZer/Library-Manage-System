@@ -73,7 +73,7 @@
                 <tr>
                     <!--左边内容-->
                     <td colspan="2" valign="top">
-                        <marquee><h3 style="margin:20px 0 10px 10px;">感谢您使用享学图书管理系统</h3></marquee>
+                        <marquee><h3 style="margin:20px 0 10px 10px;">感谢您使用骆景灏图书管理系统</h3></marquee>
                     </td>
                 </tr>
 
@@ -123,7 +123,7 @@
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="51%" class="left_txt">
-                        <img src="./Images/icon_mail.gif" width="16" height="11"> 客户服务邮箱：2087924818@qq.com<br/>
+                        <img src="./Images/icon_mail.gif" width="16" height="11"> 客户服务邮箱：1109132@qq.com<br/>
 
                     </td>
                     <td>&nbsp;</td>

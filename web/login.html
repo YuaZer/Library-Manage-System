@@ -1,14 +1,278 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>享学图书管理系统</title>
+    <title>图书管理系统</title>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
-    <meta content="享学图书管理系统" name="description"/>
-    <meta content="享学,网站管理系统,企业网站" name="keywords"/>
+    <meta content="骆景灏图书管理系统" name="description"/>
+    <meta content="骆景灏,网站管理系统,企业网站" name="keywords"/>
     <meta content="phenix" name="Author"/>
-    <meta content="享学科技" name="CopyRight"/>
+    <meta content="骆景灏" name="CopyRight"/>
     <link href="./Style/skin.css" rel="stylesheet" type="text/css"/>
     <script language="JavaScript" src="Js/jquery-3.3.1.min.js"></script>
+
+    <style>
+        /* ========= 仅美化，不改逻辑 ========= */
+        :root {
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+            --text: #1f2937;
+            --muted: #6b7280;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --danger: #ef4444;
+            --radius: 14px;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: "Microsoft YaHei", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--text);
+        }
+
+        /* 顶部条仍然使用你原来的背景图 */
+        .topbar {
+            height: 41px;
+            background: url(./Images/login_top_bg.gif) repeat-x;
+        }
+
+        /* 主背景仍然使用你原来的 login_bg.jpg，但增加遮罩让字更清晰 */
+        .page {
+            min-height: calc(100vh - 41px - 48px);
+            background: url(./Images/login_bg.jpg) repeat-x;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 16px;
+        }
+
+        .page::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(0,0,0,0.25), rgba(0,0,0,0.05));
+            pointer-events: none;
+        }
+
+        /* 主容器：左宣传 + 右登录卡片 */
+        .container {
+            width: min(1040px, 100%);
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 22px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: var(--radius);
+            padding: 26px 26px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+            color: #fff;
+        }
+
+        .hero .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .hero .brand img {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+        }
+
+        .hero h2 {
+            margin: 0;
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+
+        .hero p {
+            margin: 10px 0 0 0;
+            color: rgba(255,255,255,0.88);
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .hero ul {
+            margin: 16px 0 0 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 10px;
+        }
+
+        .hero li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.16);
+        }
+
+        .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.85);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.14);
+            flex: 0 0 auto;
+        }
+
+        /* 登录卡片 */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 18px 20px;
+            background: linear-gradient(135deg, rgba(37,99,235,0.10), rgba(37,99,235,0.02));
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .card-header h4 {
+            margin: 0;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+        .card-header .sub {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .card-body {
+            padding: 18px 20px 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 92px 1fr;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .form-row label {
+            color: #374151;
+            font-size: 14px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            height: 40px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.12);
+            outline: none;
+            background: #fff;
+            transition: all .15s ease;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: rgba(37,99,235,0.55);
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
+        }
+
+        /* 验证码布局：输入+图片并排 */
+        .captcha-wrap {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #code {
+            height: 38px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.12);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            justify-content: flex-end;
+        }
+
+        input[type="submit"], input[type="reset"] {
+            height: 40px;
+            padding: 0 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.10);
+            cursor: pointer;
+            transition: all .15s ease;
+            font-weight: 600;
+        }
+
+        input[type="submit"] {
+            background: var(--primary);
+            border-color: rgba(37,99,235,0.35);
+            color: #fff;
+        }
+
+        input[type="submit"]:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        input[type="reset"] {
+            background: #fff;
+            color: #111827;
+        }
+
+        input[type="reset"]:hover {
+            border-color: rgba(0,0,0,0.18);
+            transform: translateY(-1px);
+        }
+
+        /* 底部 */
+        .footer {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.06);
+            color: #4b5563;
+            font-size: 13px;
+        }
+
+        /* 响应式：窄屏改成上下布局 */
+        @media (max-width: 860px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .hero {
+                display: none; /* 也可改为 display:block 保留宣传区 */
+            }
+        }
+    </style>
 
     <script language="JavaScript">
         // 1. 文档加载完成时，即完成了jquery的调用
@@ -21,75 +285,71 @@
         });
     </script>
 </head>
+
 <body>
-<table width="100%">
-    <!-- 顶部部分 -->
-    <tr height="41">
-        <td background="./Images/login_top_bg.gif" colspan="2">&nbsp;</td>
-    </tr>
-    <!-- 主体部分 -->
-    <tr height="532" style="background:url(./Images/login_bg.jpg) repeat-x;">
-        <!-- 主体左部分 -->
-        <td height="100%" id="left_cont" valign="top" width="100%">
-            <table>
-                <tr>
-                    <td rowspan="2" width="20%">
-                        <ul>
-                            <li><img src="./Images/book.jpg"/>&nbsp;<a href="javascript:void(0)"></li>
-                        </ul>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        <!-- 主体右部分 -->
-        <td id="right_cont">
-            <table height="100%">
-                <tr height="30%">
-                    <td colspan="3">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td rowspan="5" width="30%">&nbsp;</td>
-                    <td id="form" valign="top">
-                        <form action="user?type=login" id="fmLogin" method="post">
-                            <table valign="top" width="50%">
-                                <tr>
-                                    <td colspan="2"><h4 style="letter-spacing:1px;font-size:16px;">享学图书管理系统</h4></td>
-                                </tr>
-                                <tr>
-                                    <td>管理员：</td>
-                                    <td><input name="name" required type="text"/></td>
-                                </tr>
-                                <tr>
-                                    <td>密&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
-                                    <td><input name="pwd" required type="password"/></td>
-                                </tr>
-                                <tr>
-                                    <td>验证码：</td>
-                                    <td style="position: relative;"><input name="valcode" style="width:60px;" type="text"
-                                                                           value=""/>&nbsp;<img id="code"
-                                                                                                           src="code"
-                                                                                                           style="position: absolute; top:2px;"/>
-                                    </td>
-                                </tr>
-                                <tr class="bt">
-                                    <td>&nbsp;</td>
-                                    <td><input type="submit" value="登录"/>&nbsp;<input type="reset" value="重填"/></td>
-                                </tr>
-                            </table>
-                        </form>
-                    </td>
-                    <td rowspan="5">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="3">&nbsp;</td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <!-- 底部部分 -->
-    <tr id="login_bot">
-        <td colspan="2"><p>Copyright © 2011-2021 享学课堂科技信息有限公司</p></td>
-    </tr>
-</table>
+<div class="topbar"></div>
+
+<div class="page">
+    <div class="container">
+        <!-- 左侧展示区（不影响逻辑，仅视觉） -->
+        <div class="hero">
+            <div class="brand">
+                <img src="./Images/book.jpg" alt="logo"/>
+                <div>
+                    <h2>图书管理系统</h2>
+                    <p>一个简洁、稳定的图书管理登录入口（支持验证码刷新）。</p>
+                </div>
+            </div>
+
+            <ul>
+                <li><span class="dot"></span><span>统一管理员登录入口</span></li>
+                <li><span class="dot"></span><span>验证码点击刷新，防止恶意登录</span></li>
+                <li><span class="dot"></span><span>界面更清爽，输入更舒服</span></li>
+            </ul>
+        </div>
+
+        <!-- 右侧登录卡片 -->
+        <div class="card">
+            <div class="card-header">
+                <h4>管理员登录</h4>
+                <div class="sub">请输入账号、密码与验证码</div>
+            </div>
+
+            <div class="card-body">
+                <form action="user?type=login" id="fmLogin" method="post">
+                    <div class="form-row">
+                        <label>管理员：</label>
+                        <input name="name" required type="text" autocomplete="username"/>
+                    </div>
+
+                    <div class="form-row">
+                        <label>密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+                        <input name="pwd" required type="password" autocomplete="current-password"/>
+                    </div>
+
+                    <div class="form-row">
+                        <label>验证码：</label>
+                        <div>
+                            <div class="captcha-wrap">
+                                <input name="valcode" type="text" value="" placeholder="输入验证码"/>
+                                <img id="code" src="code" alt="验证码(点击刷新)"/>
+                            </div>
+                            <div class="hint">看不清？点击右侧验证码图片刷新。</div>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <input type="reset" value="重填"/>
+                        <input type="submit" value="登录"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p style="margin:0;">Copyright © 2025 作业</p>
+</div>
 </body>
 </html>

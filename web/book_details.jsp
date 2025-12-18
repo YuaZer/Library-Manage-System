@@ -171,7 +171,7 @@
                 <tr>
                     <td width="2%">&nbsp;</td>
                     <td width="51%" class="left_txt">
-                        <img src="./Images/icon_mail.gif" width="16" height="11"> 客户服务邮箱：2087924818@qq.com<br/>
+                        <img src="./Images/icon_mail.gif" width="16" height="11"> 客户服务邮箱：1109132@qq.com<br/>
                     </td>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
