@@ -12,13 +12,13 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * @desc 数据库的帮助类
+ * &#064;desc  数据库的帮助类
  * 1.当前数据库的连接对象由连接池进行分配
      我们本次使用的连接池是c3p0
 	 
    2.当前数据库的帮助类可以完成事务处理
    
- * @author 凤姐
+ * @author 骆景灏
  *
  */
 public class DBHelper {

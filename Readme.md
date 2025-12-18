@@ -3,22 +3,6 @@
 ![img](readmeStatic/img.png)
 
 
-## 源码下载
-
-百度网盘: [https://pan.baidu.com/s/1-0vk8HscZYlESQwsst-IUw?pwd=38fx](https://pan.baidu.com/s/1-0vk8HscZYlESQwsst-IUw?pwd=38fx)
-
-         提取码：38fx 
-GitHub：https://github.com/codermast/Library-Manage-System/raw/master/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F-JavaWeb.rar
-
-## 项目介绍
-
-&emsp;&emsp;本项目是本人在大三阶段，学习完了Java
-Web相关的知识点，为了对知识点进行总结和更好的掌握，编写的一款基于Java语言，Servlet、Jsp、MySQL等技术的实现的图书借阅管理系统。也是本人第一款独立完成能够实现其功能的项目。
-
-&emsp;&emsp;此项目主要完成了会员管理、图书管理、图书类型管理、图书借阅管理...等功能模块，能够实现基本的会员、图书、图书类型的增删改查，以及对会员借阅图书功能的完成。
-
-&emsp;&emsp;项目当中部分功能的实现会在所难免的有小瑕疵，会在文章的末尾进行标注记录，方便后续的重构优化，也方便各位友人的学习和参考。
-
 ## 项目环境
 
 - Windows 11
