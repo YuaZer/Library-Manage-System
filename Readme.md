@@ -10,7 +10,7 @@
 - Java:JDK1.8
 - Tomcat 8.5.60
 - Servlet:3.1
-- Mysql:5.6
+- Mysql:8.1.0
 - JSP
 
 ## 项目依赖
