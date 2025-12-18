@@ -1,6 +1,7 @@
 package com.bite.mybook.biz;
 
 import com.bite.mybook.bean.Book;
+import com.bite.mybook.bean.Member;
 import com.bite.mybook.bean.Record;
 import com.bite.mybook.dao.RecordDao;
 import com.bite.mybook.util.DBHelper;
@@ -8,6 +9,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 public class RecordBiz {
@@ -53,7 +55,8 @@ public class RecordBiz {
                 // 修改库存
                 bookBiz.modify(book.getId(),-1);
 
-                boolean add = recordDao.add(mid, bookid, deposit, userId);
+                String isbn = String.format("BOOK-%05d", book.getId());
+                boolean add = recordDao.add(mid, bookid, deposit, userId, isbn);
                 if (!add){
                     ret = false;
                 }
@@ -78,15 +81,34 @@ public class RecordBiz {
     public List<Record> getRecordByIdNumber(String idNumber){
         List<Record> records = null;
         try {
-            long id = memberBiz.getIdByIdNum(idNumber);
-            records = recordDao.getRecordById(id);
+            long memberId = memberBiz.getIdByIdNum(idNumber);
+            Member member = null;
+            if (memberId >= 0) {
+                member = memberBiz.getById(memberId);
+            } else {
+                try {
+                    long parsed = Long.parseLong(idNumber);
+                    member = memberBiz.getById(parsed);
+                    if (member != null) {
+                        memberId = member.getId();
+                    }
+                } catch (NumberFormatException ignore) {
+                }
+            }
+            if (member == null || memberId < 0) {
+                return null;
+            }
+
+            records = recordDao.getRecordById(memberId);
+            if (records == null) {
+                records = new LinkedList<>();
+            }
 
             for (Record record : records) {
-                long memberId = record.getMemberId();
                 long bookId = record.getBookId();
                 long userId = record.getUserId();
                 record.setBook(bookBiz.getBookByBookId(bookId));
-                record.setMember(memberBiz.getMemberByIdNumber(memberBiz.getIdNumById(memberId)));
+                record.setMember(member);
                 record.setUser(userBiz.getUserById(userId));
             }
         } catch (SQLException e) {
@@ -143,5 +165,14 @@ public class RecordBiz {
             e.printStackTrace();
         }
         return records;
+    }
+
+    public Record getRecordByRecordId(long recordId){
+        try {
+            return recordDao.getRecordByRecordId(recordId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

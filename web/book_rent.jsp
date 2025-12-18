@@ -59,13 +59,24 @@
                     alert("请输入用户号");
                     return;
                 }
-                //2.调用js-ajax()/post()/get
+                var queryBtn = $(this);
+                queryBtn.prop("disabled", "disabled");
                 var url = "member?type=doajax&idn=" + content;
                 $.get(url, function (data, status) {
                     //json字符串
-                    //{"balance":145.0,"id":1,"idNumber":"300312199506150011","name":"andy","pwd":"andyliu","regdate":1627747200000,"tel":"13374645654","type":{"amount":"5","discount":100.0,"id":1,"keepDay":30,"name":"普通会员","recharge":100},"typeId":1}
                     console.log(data);
 
+                    if (!data || data === "{}") {
+                        alert("未找到会员信息");
+                        member = null;
+                        queryBtn.removeAttr("disabled");
+                        $("#btnQueryBook").prop("disabled", "disabled");
+                        $("#name").val("");
+                        $("#type").val("");
+                        $("#amount").val("");
+                        $("#balance").val("");
+                        return;
+                    }
                     //1.json字符串--》json对象
                     member = JSON.parse(data);
 
@@ -77,17 +88,31 @@
                     $("#amount").val(member.type.amount);
                     $("#balance").val(member.balance);
 
+                    $("#btnQueryBook").removeAttr("disabled");
+                }).fail(function () {
+                    alert("查询会员信息失败，请稍后重试");
+                    queryBtn.removeAttr("disabled");
                 });
-                //查询用户的功能关闭
-                $(this).prop("disabled", "disabled");
-                //开启了查询按钮的功能
-                $("#btnQueryBook").removeAttr("disabled");
+            });
+
+            $("#memberId").on("input", function () {
+                member = null;
+                $("#btnQuery").removeAttr("disabled");
+                $("#btnQueryBook").prop("disabled", "disabled");
             });
 
             //保存所有添加过的书名
             var bookNameList = [];
             $("#btnQueryBook").click(function () {
+                if (!member) {
+                    alert("请先查询会员信息");
+                    return;
+                }
                 var name = $("#bookContent").val();
+                if (!name) {
+                    alert("请输入书籍名称");
+                    return;
+                }
                 var url = "book?type=doajax&name=" + name;
                 $.get(url, function (data, status) {
                     //{}/一本书的json
@@ -117,20 +142,15 @@
                      <td>39.9</td>
                      </tr>
                      */
-                        //1.创建行
                     var tr = $("<tr align=\"center\" class=\"d\">");
-                    //2.创建多个列
                     var tdCheck = $("<td><input type=\"checkbox\" value=\"" + book.id + "\" class=\"ck\" checked /></td>");
                     var tdName = $("<td>" + book.name + "</td>");
-                    //借阅日期：系统当前时间
-                    //归还日期：系统当前时间 +会员等级中.keeyDay
                     var tdRentDate = $("<td>" + getCurrentDate() + "</td>");
                     var tdBackDate = $("<td>" + getBackDate(member.type.keepDay) + "</td>");
                     var tdPublish = $("<td>" + book.publish + "</td>");
                     var tdAddress = $("<td>" + book.address + "</td>");
                     var tdPrice = $("<td>" + book.price + "</td>");
 
-                    //3.行加列
                     tr.append(tdCheck);
                     tr.append(tdName);
                     tr.append(tdRentDate);
@@ -138,7 +158,6 @@
                     tr.append(tdPublish);
                     tr.append(tdAddress);
                     tr.append(tdPrice);
-                    //4.表加行
                     $("#tdBook").append(tr);
                     $("#bookContent").val("");
                     $("#btnSubmit").removeAttr("disabled");
@@ -153,6 +172,10 @@
 
             //完成借阅功能
             $("#btnSubmit").click(function () {
+                if (!member) {
+                    alert("请先查询会员信息");
+                    return;
+                }
 
                 //1.获取用户选择的书籍编号(多本 1,2,3  1_2_3)
                 var ids = [];
@@ -172,7 +195,7 @@
                     return;
                 }
                 //请求servlet http://localhost:8888/mybook_war_exploded/record?type=add&mid=1&ids=5_4_9_10
-                location.href = "record?type=add&mid=" + member.id + "&ids=" + ids.join("_");
+                location.href = "record?type=add&mid=" + member.id + "&ids=" + ids.join("_") + "&redirect=book_rent.jsp";
             });
         });
 

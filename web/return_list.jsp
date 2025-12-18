@@ -41,10 +41,27 @@
                 var idStr = idList.join("_");
 
                 //3.发送请求  record?type=back&mid=1&ids=1_2  record?type=back&mid=1&ids=1___
-                var path = "record?type=back&mid=" + $("#memberId").val() + "&ids=" + idStr;
+                var idNumber = $("#idNubmer").val();
+                var path = "record?type=back&mid=" + $("#memberId").val() + "&ids=" + idStr + "&idn=" + idNumber;
                 location.href = path;
                 console.log(path);
 
+            });
+
+            $("#ckAll").click(function () {
+                $(".ck").prop("checked", $(this).prop("checked"));
+            });
+
+            $(".btn-return-single").click(function () {
+                var recordId = $(this).data("id");
+                var memberId = $("#memberId").val();
+                if (!memberId) {
+                    alert("请先查询会员");
+                    return;
+                }
+                var idNumber = $("#idNubmer").val();
+                var path = "record?type=back&mid=" + memberId + "&ids=" + recordId + "&idn=" + idNumber;
+                location.href = path;
             });
 
         });
@@ -210,11 +227,11 @@
                                                             <td>${r.book.publish}</td>
                                                             <td>${r.book.address}</td>
                                                             <td>${r.deposit}</td>
-                                                            <td>未归还</td>
-                                                            <td></td>
-                                                        </tr>
-                                                    </c:if>
-                                                    <c:if test="${r.isBack == 1}">
+                                                    <td>未归还</td>
+                                                    <td><button type="button" class="btn btn-return-single" data-id="${r.id}">归还</button></td>
+                                                </tr>
+                                            </c:if>
+                                            <c:if test="${r.isBack == 1}">
                                                         <tr align="center" class="d">
                                                             <td><input type="checkbox" value="${r.id}" class="ck"/>
                                                             </td>
@@ -272,11 +289,5 @@
         </td>
     </tr>
 </table>
-<script>
-    //全选功能
-    $("#ckAll").click(function () {
-        $(".ck").prop("checked", $(this).prop("checked"));
-    });
-</script>
 </body>
 </html>

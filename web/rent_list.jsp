@@ -144,6 +144,20 @@
     </tr>
 </table>
 <script>
+    function formatDate(value) {
+        if (value === undefined || value === null || value === "") {
+            return "";
+        }
+        var date = new Date(value);
+        if (isNaN(date.getTime())) {
+            return value;
+        }
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        return year + "-" + (month < 10 ? "0" + month : month) + "-" + (day < 10 ? "0" + day : day);
+    }
+
     $(function () {
         $("#btnQuery").click(function () {
             //0.清理
@@ -165,12 +179,14 @@
                 console.log(records);
                 for (var i = 0;i<records.length ;i++) {
                     var record = records[i];
+                    var rentDate = formatDate(record.rentDate);
+                    var backDate = formatDate(record.backDate);
                     //tr
                     var tr = $(" <tr align=\"center\" class=\"d\">");
                     var tdMName = $(" <td>" + record.member.name + "</td>");
                     var tdBName = $("<td>" + record.book.name + "</td>");
-                    var tdRentDate = $("<td>" + record.rentDate + "</td>");
-                    var tdBackDate = $("<td>" + (record.backDate === undefined ? "" : record.backDate) + "</td>");
+                    var tdRentDate = $("<td>" + rentDate + "</td>");
+                    var tdBackDate = $("<td>" + (backDate) + "</td>");
                     var tdDeposit = $("<td>" + record.deposit + "</td>");
                     //5-td
                     tr.append(tdMName);

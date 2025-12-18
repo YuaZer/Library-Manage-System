@@ -176,7 +176,7 @@ public class MemberDao {
 
         Member member = runner.query(connection, sql, new BeanHandler<>(Member.class), idNumber);
         connection.close();
-        return member.getId();
+        return member == null ? -1 : member.getId();
     }
 
 

@@ -47,12 +47,11 @@ public class RecordServlet extends HttpServlet {
 
         //验证用户是否登录
         HttpSession session = req.getSession();
-        if (session.getAttribute("user") == null) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
             out.println("<script>alert('请登录');parent.window.location.href='login.html';</script>");
             return;
         }
-
-        User user = (User) session.getAttribute("user");
 
 
         ServletContext application = req.getServletContext();
@@ -75,6 +74,9 @@ public class RecordServlet extends HttpServlet {
             case "queryback":
                 queryback(req, resp, out, application);
                 break;
+            case "keep":
+                keep(req, resp, out, application, user);
+                break;
             default:
                 resp.sendError(404);
         }
@@ -94,13 +96,17 @@ public class RecordServlet extends HttpServlet {
         long userId = user.getId();
 
         boolean add = recordBiz.add(mid, arr, userId);
+        String redirect = req.getParameter("redirect");
+        if (redirect == null || redirect.trim().isEmpty()) {
+            redirect = "main.jsp";
+        }
 
         if (add) {
             List<Record> records = recordBiz.getRecordById(mid);
             req.setAttribute("records", records);
-            out.println("<script>alert('图书借阅成功');location.href='main.jsp';</script>");
+            out.println("<script>alert('图书借阅成功');location.href='" + redirect + "';</script>");
         } else {
-            out.println("<script>alert('图书借阅失败');location.href='main.jsp';</script>");
+            out.println("<script>alert('图书借阅失败');location.href='" + redirect + "';</script>");
         }
     }
 
@@ -143,10 +149,14 @@ public class RecordServlet extends HttpServlet {
         long mid = Long.parseLong(req.getParameter("mid"));
         String[] split = req.getParameter("ids").split("_");
         boolean backAll = recordBiz.backBooks(mid, split);
+        String idNumber = req.getParameter("idn");
+        String redirect = (idNumber == null || idNumber.trim().isEmpty())
+                ? "return_list.jsp"
+                : "record?type=queryback&idn=" + idNumber.trim();
         if (backAll) {
-            out.println("<script>alert('图书归还成功');location.href='main.jsp';</script>");
+            out.println("<script>alert('图书归还成功');location.href='" + redirect + "';</script>");
         } else {
-            out.println("<script>alert('图书归还失败');location.href='main.jsp';</script>");
+            out.println("<script>alert('图书归还失败');location.href='" + redirect + "';</script>");
         }
     }
 
@@ -156,13 +166,51 @@ public class RecordServlet extends HttpServlet {
         List<Record> records = recordBiz.getRecordByIdNumber(idNubmer);
 
         Member member = memberBiz.getMemberByIdNumber(idNubmer);
+        if (member == null) {
+            try {
+                long memberId = Long.parseLong(idNubmer);
+                member = memberBiz.getById(memberId);
+            } catch (NumberFormatException ignore) {
+            }
+        }
+        if (member == null) {
+            out.println("<script>alert('未找到该会员信息');location.href='return_list.jsp';</script>");
+            return;
+        }
         Membertype membertype = membertypeBiz.getByTypeId(member.getTypeId());
         member.setType(membertype);
 
+        if (records == null) {
+            records = new LinkedList<>();
+        }
 
         req.setAttribute("member", member);
         req.setAttribute("records", records);
 
         req.getRequestDispatcher("return_list.jsp").forward(req, resp);
+    }
+
+    private void keep(HttpServletRequest req, HttpServletResponse resp, PrintWriter out, ServletContext application, User user) {
+        long recordId = Long.parseLong(req.getParameter("id"));
+        Record record = recordBiz.getRecordByRecordId(recordId);
+        if (record == null) {
+            out.println("<script>alert('未找到借阅记录');location.href='return_list.jsp';</script>");
+            return;
+        }
+        if (record.getBackDate() == null) {
+            out.println("<script>alert('该图书尚未归还，无法续借');location.href='return_list.jsp';</script>");
+            return;
+        }
+        long memberId = record.getMemberId();
+        boolean add = recordBiz.add(memberId, new long[]{record.getBookId()}, user.getId());
+        String idNumber = memberBiz.getIdNumById(memberId);
+        String redirect = (idNumber == null || idNumber.trim().isEmpty())
+                ? "return_list.jsp"
+                : "record?type=queryback&idn=" + idNumber;
+        if (add) {
+            out.println("<script>alert('续借成功');location.href='" + redirect + "';</script>");
+        } else {
+            out.println("<script>alert('续借失败，请稍后重试');location.href='" + redirect + "';</script>");
+        }
     }
 }

@@ -11,6 +11,7 @@ public class Record implements Serializable {
   private java.sql.Date rentDate;
   private java.sql.Date backDate;
   private double deposit;
+  private String isbn;
   private long userId;
   private long isBack;
 
@@ -103,6 +104,14 @@ public class Record implements Serializable {
 
   public void setDeposit(double deposit) {
     this.deposit = deposit;
+  }
+
+  public String getIsbn() {
+    return isbn;
+  }
+
+  public void setIsbn(String isbn) {
+    this.isbn = isbn;
   }
 
 

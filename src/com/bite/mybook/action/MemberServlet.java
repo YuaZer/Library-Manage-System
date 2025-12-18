@@ -77,6 +77,17 @@ public class MemberServlet extends HttpServlet {
         String idNum = req.getParameter("idn");
         MembertypeBiz membertypeBiz = new MembertypeBiz();
         Member memberByIdNumber = memberBiz.getMemberByIdNumber(idNum);
+        if (memberByIdNumber == null) {
+            try {
+                long memberId = Long.parseLong(idNum);
+                memberByIdNumber = memberBiz.getById(memberId);
+            } catch (NumberFormatException ignore) {
+            }
+        }
+        if (memberByIdNumber == null) {
+            out.print("{}");
+            return;
+        }
         memberByIdNumber.setType(membertypeBiz.getByTypeId(memberByIdNumber.getTypeId()));
         String memberJsonStr = JSON.toJSONString(memberByIdNumber);
         out.print(memberJsonStr);

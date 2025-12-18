@@ -146,12 +146,12 @@ public class MemberBiz {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return memberById.getIdNumber();
+        return memberById == null ? null : memberById.getIdNumber();
     }
 
     // 通过 idNumber 获取 id
     public long getIdByIdNum(String idNumber){
-        long idByIdNum = 0;
+        long idByIdNum = -1;
         try {
             idByIdNum = memberDao.getIdByIdNum(idNumber);
         } catch (SQLException e) {
