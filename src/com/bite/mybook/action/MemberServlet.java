@@ -128,6 +128,9 @@ public class MemberServlet extends HttpServlet {
         long id = Long.parseLong(req.getParameter("id"));
         Member member = memberBiz.getById(id);
         req.setAttribute("member", member);
+        // 准备会员类型下拉数据
+        MembertypeBiz membertypeBiz = new MembertypeBiz();
+        req.setAttribute("memberTypes", membertypeBiz.getAll());
 
         // 转发到 jsp 页面
         req.getRequestDispatcher("mem_modify.jsp").forward(req, resp);
@@ -135,7 +138,18 @@ public class MemberServlet extends HttpServlet {
 
     private void modify(HttpServletRequest req, HttpServletResponse resp, PrintWriter out, ServletContext application) throws ServletException, IOException {
         // 用户 id
-        long id = Long.parseLong(req.getParameter("id"));
+        String idParam = req.getParameter("id");
+        if (idParam == null || idParam.trim().isEmpty()) {
+            out.println("<script>alert('会员编号不能为空！');location.href='mem_list.jsp';</script>");
+            return;
+        }
+        long id;
+        try {
+            id = Long.parseLong(idParam);
+        } catch (NumberFormatException e) {
+            out.println("<script>alert('会员编号格式错误！');location.href='mem_list.jsp';</script>");
+            return;
+        }
         // 用户名
         String name = req.getParameter("name");
         // 密码
@@ -151,12 +165,19 @@ public class MemberServlet extends HttpServlet {
         // 身份证号
         String idNumber = req.getParameter("idNumber");
 
+        Member existing = memberBiz.getById(id);
+        if (existing == null) {
+            out.println("<script>alert('会员不存在！');location.href='mem_list.jsp';</script>");
+            return;
+        }
+
         Member member = new Member();
         member.setId(id);
         member.setName(name);
         member.setPwd(pwd);
         member.setTypeId(membertypeid);
         member.setBalance(balance);
+        member.setRegdate(existing.getRegdate());
         member.setTel(tel);
         member.setIdNumber(idNumber);
 

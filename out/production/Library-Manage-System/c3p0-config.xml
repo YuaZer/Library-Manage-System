@@ -12,7 +12,7 @@
         <property name="driverClass">com.mysql.cj.jdbc.Driver</property>
 
         <!-- ✅ 必须单行，避免空白/换行导致 No suitable driver -->
-        <property name="jdbcUrl">jdbc:mysql://127.0.0.1:3306/bookdb?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false&amp;serverTimezone=Asia/Shanghai</property>
+        <property name="jdbcUrl">jdbc:mysql://127.0.0.1:3306/bookdb?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false&amp;serverTimezone=Asia/Shanghai&amp;allowPublicKeyRetrieval=true</property>
 
         <property name="user">root</property>
         <property name="password">root</property>
